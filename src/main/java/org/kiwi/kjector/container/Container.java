@@ -68,12 +68,19 @@ public class Container {
 
         for (int parameterIndex = 0; parameterIndex < parameterTypes.length; parameterIndex++) {
             if (parameterAnnotations[parameterIndex].length > 0) {
-                final Named namedAnnotation = (Named) parameterAnnotations[parameterIndex][0];
-                resolvedParameters.add(resolveByName(namedAnnotation.value()));
+                resolvedParameters.add(resolveByName(resolveNamedAnnotation(parameterAnnotations[parameterIndex])));
             } else {
                 resolvedParameters.add(resolve(parameterTypes[parameterIndex]));
             }
         }
         return resolvedParameters.toArray();
+    }
+
+    private String resolveNamedAnnotation(Annotation[] annotations) {
+        final Named namedAnnotation = (Named) Arrays.asList(annotations).stream()
+                .filter(annotation -> annotation.annotationType() == Named.class)
+                .findFirst().orElseGet(() -> null);
+
+        return namedAnnotation == null ? null : namedAnnotation.value();
     }
 }
