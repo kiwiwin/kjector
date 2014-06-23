@@ -5,7 +5,6 @@ import org.kiwi.kjector.container.Container;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class FieldInjectPoint implements InjectPoint {
     private final InjectPoint constructorInjectPoint;
@@ -26,6 +25,7 @@ public class FieldInjectPoint implements InjectPoint {
                 field.setAccessible(false);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+                return null;
             }
         }
         return resolvedObject;

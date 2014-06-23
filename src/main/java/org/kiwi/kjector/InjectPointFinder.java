@@ -5,13 +5,27 @@ import org.kiwi.kjector.injectpoint.*;
 import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class InjectPointFinder {
     public InjectPoint findInjectPoint(Class klass) {
-        return getFieldInjectPoint(klass, getConstructorInjectPoint(klass));
+        return getMethodInjectPoint(klass,
+                getFieldInjectPoint(klass,
+                        getConstructorInjectPoint(klass)));
+    }
+
+    private InjectPoint getMethodInjectPoint(Class klass, InjectPoint injectPoint) {
+        final List<Method> methods = getMethodInjectPoint(klass);
+        return methods.isEmpty() ? injectPoint : new MethodInjectPoint(injectPoint, methods);
+    }
+
+    private List<Method> getMethodInjectPoint(Class klass) {
+        return Arrays.asList(klass.getDeclaredMethods()).stream()
+                .filter(method -> method.getAnnotation(Inject.class) != null)
+                .collect(Collectors.toList());
     }
 
     private InjectPoint getFieldInjectPoint(Class klass, InjectPoint injectPoint) {

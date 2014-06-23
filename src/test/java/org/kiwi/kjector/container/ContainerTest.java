@@ -1,14 +1,12 @@
 package org.kiwi.kjector.container;
 
 import org.junit.Test;
-import org.kiwi.kjector.container.sample.FieldInjectSample;
 import org.kiwi.kjector.container.sample.ParameterConstructorParameterSample;
 import org.kiwi.kjector.container.sample.ParameterConstructorSample;
 import org.kiwi.kjector.injectpoint.sample.DefaultConstructorSample;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 public class ContainerTest {
     @Test(expected = NoSuitableBeanRegisteredException.class)

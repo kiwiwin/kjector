@@ -48,4 +48,11 @@ public class InjectPointFinderTest {
 
         assertThat(injectPoint, instanceOf(FieldInjectPoint.class));
     }
+
+    @Test
+    public void should_has_method_as_inject_point_if_has_method_with_inject_annotation() {
+        final InjectPoint injectPoint = injectPointFinder.findInjectPoint(MethodInjectAnnotationSample.class);
+
+        assertThat(injectPoint, instanceOf(MethodInjectPoint.class));
+    }
 }
