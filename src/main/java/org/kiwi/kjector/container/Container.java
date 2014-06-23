@@ -2,12 +2,16 @@ package org.kiwi.kjector.container;
 
 import org.kiwi.kjector.InjectPointFinder;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Container {
     private final InjectPointFinder injectPointFinder;
     private final Set<Class> registeredClasses = new HashSet<>();
     private final Map<Class, Object> resolvedObjects = new HashMap<>();
+    private final Map<String, Object> namedObjects = new HashMap<>();
 
     private Container(InjectPointFinder injectPointFinder) {
         this.injectPointFinder = injectPointFinder;
@@ -41,5 +45,18 @@ public class Container {
         registeredClasses.add(bindClass);
         resolvedObjects.put(bindClass, bindObject);
         return this;
+    }
+
+    public Container registerByName(String objectName, Object object) {
+        namedObjects.put(objectName, object);
+        return this;
+    }
+
+    public Object resolveByName(String objectName) {
+        final Object namedObject = namedObjects.get(objectName);
+        if (namedObject == null) {
+            throw new NoSuitableNamedBeanRegisteredException(objectName);
+        }
+        return namedObject;
     }
 }
