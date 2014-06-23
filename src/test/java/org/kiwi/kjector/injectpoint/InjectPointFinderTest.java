@@ -1,13 +1,11 @@
 package org.kiwi.kjector.injectpoint;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kiwi.kjector.InjectPoint;
 import org.kiwi.kjector.InjectPointFinder;
-import org.kiwi.kjector.injectpoint.sample.DefaultConstructorSample;
-import org.kiwi.kjector.injectpoint.sample.MultiInjectConstructorSample;
-import org.kiwi.kjector.injectpoint.sample.ParameterConstructorSample;
-import org.kiwi.kjector.injectpoint.sample.ParameterConstructorWithInjectAnnotationSample;
+import org.kiwi.kjector.injectpoint.sample.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -43,5 +41,12 @@ public class InjectPointFinderTest {
     @Test(expected = MultiConstructorInjectPointFoundException.class)
     public void should_throw_exception_when_multi_inject_constructor_found() {
         injectPointFinder.findInjectPoint(MultiInjectConstructorSample.class);
+    }
+
+    @Test
+    public void should_has_field_as_inject_point_if_has_field_with_inject_annotation() {
+        final InjectPoint injectPoint = injectPointFinder.findInjectPoint(FiledInjectAnnotationSample.class);
+
+        assertThat(injectPoint, instanceOf(FieldInjectPoint.class));
     }
 }

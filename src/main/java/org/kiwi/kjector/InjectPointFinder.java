@@ -1,43 +1,52 @@
 package org.kiwi.kjector;
 
-import org.kiwi.kjector.injectpoint.DefaultConstructorInjectPoint;
-import org.kiwi.kjector.injectpoint.InjectPointNotFoundException;
-import org.kiwi.kjector.injectpoint.MultiConstructorInjectPointFoundException;
-import org.kiwi.kjector.injectpoint.ParameterConstructorInjectPoint;
+import org.kiwi.kjector.injectpoint.*;
 
 import javax.inject.Inject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class InjectPointFinder {
     public InjectPoint findInjectPoint(Class klass) {
-        if (hasMultiInjectConstructor(klass)) {
+        return getFieldInjectPoint(klass, getConstructorInjectPoint(klass));
+    }
+
+    private InjectPoint getFieldInjectPoint(Class klass, InjectPoint injectPoint) {
+        final List<Field> fields = getFieldInjectPoint(klass);
+        return fields.isEmpty() ? injectPoint : new FieldInjectPoint(injectPoint, fields);
+    }
+
+    private List<Field> getFieldInjectPoint(Class klass) {
+        return Arrays.asList(klass.getDeclaredFields()).stream()
+                .filter(field -> field.getAnnotation(Inject.class) != null)
+                .collect(Collectors.toList());
+    }
+
+    private InjectPoint getConstructorInjectPoint(Class klass) {
+        final List<Constructor> injectConstructors = getInjectConstructor(klass);
+        if (injectConstructors.size() > 1) {
             throw new MultiConstructorInjectPointFoundException(klass);
         }
 
+        if (!injectConstructors.isEmpty()) {
+            return new ParameterConstructorInjectPoint(injectConstructors.get(0));
+        }
+
         final Constructor defaultConstructor = getDefaultConstructor(klass);
-        if (defaultConstructor != null) {
-            return new DefaultConstructorInjectPoint(defaultConstructor);
+        if (defaultConstructor == null) {
+            throw new InjectPointNotFoundException(klass);
         }
 
-        final Constructor parameterConstructor = getParameterConstructor(klass);
-        if (parameterConstructor != null) {
-            return new ParameterConstructorInjectPoint(parameterConstructor);
-        }
-
-        throw new InjectPointNotFoundException(klass);
+        return new DefaultConstructorInjectPoint(defaultConstructor);
     }
 
-    private boolean hasMultiInjectConstructor(Class klass) {
+    private List<Constructor> getInjectConstructor(Class klass) {
         return Arrays.asList(klass.getConstructors()).stream()
                 .filter(this::isInjectConstructor)
-                .count() > 1;
-    }
-
-    private Constructor getParameterConstructor(Class klass) {
-        return Arrays.asList(klass.getConstructors()).stream()
-                .filter(this::isInjectConstructor)
-                .findFirst().orElseGet(() -> null);
+                .collect(Collectors.toList());
     }
 
     private boolean isInjectConstructor(Constructor constructor) {

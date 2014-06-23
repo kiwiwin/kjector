@@ -1,12 +1,16 @@
 package org.kiwi.kjector.container;
 
 import org.junit.Test;
+import org.kiwi.kjector.container.sample.FieldInjectSample;
 import org.kiwi.kjector.container.sample.ParameterConstructorParameterSample;
 import org.kiwi.kjector.container.sample.ParameterConstructorSample;
 import org.kiwi.kjector.injectpoint.sample.DefaultConstructorSample;
 
+import java.lang.reflect.Field;
+
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 public class ContainerTest {
 
@@ -55,4 +59,18 @@ public class ContainerTest {
 
         assertThat(resolvedObject, notNullValue());
     }
+
+    @Test
+    public void should_able_to_build_field_inject_bean() {
+        final Container container = Container.builder()
+                .bind("jack", String.class)
+                .register(FieldInjectSample.class)
+                .build();
+
+        final FieldInjectSample resolvedObject = container.resolve(FieldInjectSample.class);
+
+        assertThat(resolvedObject, notNullValue());
+        assertThat(resolvedObject.getName(), is("jack"));
+    }
+
 }

@@ -4,6 +4,8 @@ import javax.inject.Inject;
 
 public class Person {
     private final Phone phone;
+    @Inject
+    private String name;
 
     @Inject
     public Person(Phone phone) {
@@ -11,6 +13,6 @@ public class Person {
     }
 
     public void showOff() {
-        System.out.println("This is my phone -- " + phone.showPhone());
+        System.out.println("Hi, i am " + name + ". This is my phone -- " + phone.showPhone());
     }
 }
