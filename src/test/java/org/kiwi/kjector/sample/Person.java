@@ -11,10 +11,6 @@ public class Person {
     }
 
     public void showOff() {
-        if (phone != null) {
-            System.out.println("I have an iPhone5s");
-        } else {
-            System.out.println("I will have an iPhone6");
-        }
+        System.out.println("This is my phone -- " + phone.showPhone());
     }
 }

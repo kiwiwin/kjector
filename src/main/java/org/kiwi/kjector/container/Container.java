@@ -37,4 +37,9 @@ public class Container {
         return (T) resolvedObjects.get(klass);
     }
 
+    public Container bind(Object bindObject, Class bindClass) {
+        registeredClasses.add(bindClass);
+        resolvedObjects.put(bindClass, bindObject);
+        return this;
+    }
 }

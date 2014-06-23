@@ -44,4 +44,15 @@ public class ContainerTest {
 
         container.resolve(ParameterConstructorSample.class);
     }
+
+    @Test
+    public void should_bind_bean_to_class() {
+        final Container container = Container.builder()
+                .bind(new ParameterConstructorSample(new ParameterConstructorParameterSample()), ParameterConstructorSample.class)
+                .build();
+
+        final ParameterConstructorSample resolvedObject = container.resolve(ParameterConstructorSample.class);
+
+        assertThat(resolvedObject, notNullValue());
+    }
 }
