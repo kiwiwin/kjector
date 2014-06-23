@@ -3,25 +3,23 @@ package org.kiwi.kjector.injectpoint;
 import org.kiwi.kjector.InjectPoint;
 import org.kiwi.kjector.container.Container;
 
-import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class ParameterConstructorInjectPoint implements InjectPoint {
-    private final Class klass;
+    private final Constructor parameterConstructor;
 
-    public ParameterConstructorInjectPoint(Class klass) {
-        this.klass = klass;
+    public ParameterConstructorInjectPoint(Constructor parameterConstructor) {
+        this.parameterConstructor = parameterConstructor;
     }
 
     @Override
     public Object resolveObject(Container container) {
-        final Constructor constructor = getParameterConstructor();
-        final Object[] parameters = resolveParameters(container, constructor);
+        final Object[] parameters = resolveParameters(container, parameterConstructor);
 
         try {
-            return constructor.newInstance(parameters);
+            return parameterConstructor.newInstance(parameters);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
             return null;
@@ -30,10 +28,5 @@ public class ParameterConstructorInjectPoint implements InjectPoint {
 
     private Object[] resolveParameters(Container container, Constructor constructor) {
         return Arrays.asList(constructor.getParameterTypes()).stream().map(container::resolve).toArray();
-    }
-
-    private Constructor getParameterConstructor() {
-        return Arrays.asList(klass.getConstructors()).stream().filter(cons -> cons.getAnnotation(
-                Inject.class) != null).findFirst().get();
     }
 }

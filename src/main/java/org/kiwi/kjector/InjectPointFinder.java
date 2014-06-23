@@ -14,11 +14,15 @@ public class InjectPointFinder {
         if (hasMultiInjectConstructor(klass)) {
             throw new MultiConstructorInjectPointFoundException(klass);
         }
-        if (hasDefaultConstructor(klass)) {
-            return new DefaultConstructorInjectPoint(klass);
+
+        final Constructor defaultConstructor = getDefaultConstructor(klass);
+        if (defaultConstructor != null) {
+            return new DefaultConstructorInjectPoint(defaultConstructor);
         }
-        if (hasParameterConstructor(klass)) {
-            return new ParameterConstructorInjectPoint(klass);
+
+        final Constructor parameterConstructor = getParameterConstructor(klass);
+        if (parameterConstructor != null) {
+            return new ParameterConstructorInjectPoint(parameterConstructor);
         }
 
         throw new InjectPointNotFoundException(klass);
@@ -30,21 +34,21 @@ public class InjectPointFinder {
                 .count() > 1;
     }
 
-    private boolean hasParameterConstructor(Class klass) {
+    private Constructor getParameterConstructor(Class klass) {
         return Arrays.asList(klass.getConstructors()).stream()
                 .filter(this::isInjectConstructor)
-                .count() > 0;
+                .findFirst().orElseGet(() -> null);
     }
 
     private boolean isInjectConstructor(Constructor constructor) {
         return constructor.getAnnotation(Inject.class) != null;
     }
 
-    private boolean hasDefaultConstructor(Class klass) {
+    private Constructor getDefaultConstructor(Class klass) {
         try {
-            return klass.getConstructor() != null;
+            return klass.getConstructor();
         } catch (NoSuchMethodException e) {
-            return false;
+            return null;
         }
     }
 }
