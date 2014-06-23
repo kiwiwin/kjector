@@ -2,10 +2,10 @@ package org.kiwi.kjector.container;
 
 import org.kiwi.kjector.InjectPointFinder;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.inject.Named;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Executable;
+import java.util.*;
 
 public class Container {
     private final InjectPointFinder injectPointFinder;
@@ -58,5 +58,22 @@ public class Container {
             throw new NoSuitableNamedBeanRegisteredException(objectName);
         }
         return namedObject;
+    }
+
+    public Object[] resolveExecutable(Executable executable) {
+        final Annotation[][] parameterAnnotations = executable.getParameterAnnotations();
+        final Class[] parameterTypes = executable.getParameterTypes();
+
+        List<Object> resolvedParameters = new ArrayList<>();
+
+        for (int parameterIndex = 0; parameterIndex < parameterTypes.length; parameterIndex++) {
+            if (parameterAnnotations[parameterIndex].length > 0) {
+                final Named namedAnnotation = (Named) parameterAnnotations[parameterIndex][0];
+                resolvedParameters.add(resolveByName(namedAnnotation.value()));
+            } else {
+                resolvedParameters.add(resolve(parameterTypes[parameterIndex]));
+            }
+        }
+        return resolvedParameters.toArray();
     }
 }
