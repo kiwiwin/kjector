@@ -1,7 +1,6 @@
 package org.kiwi.kjector.injectpoint;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.kiwi.kjector.InjectPoint;
 import org.kiwi.kjector.InjectPointFinder;
