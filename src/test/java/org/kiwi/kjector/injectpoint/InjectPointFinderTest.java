@@ -40,7 +40,7 @@ public class InjectPointFinderTest {
         assertThat(injectPoint, instanceOf(ParameterConstructorInjectPoint.class));
     }
 
-    @Test(expected = MultiInjectPointFoundException.class)
+    @Test(expected = MultiConstructorInjectPointFoundException.class)
     public void should_throw_exception_when_multi_inject_constructor_found() {
         injectPointFinder.findInjectPoint(MultiInjectConstructorSample.class);
     }

@@ -2,7 +2,7 @@ package org.kiwi.kjector;
 
 import org.kiwi.kjector.injectpoint.DefaultConstructorInjectPoint;
 import org.kiwi.kjector.injectpoint.InjectPointNotFoundException;
-import org.kiwi.kjector.injectpoint.MultiInjectPointFoundException;
+import org.kiwi.kjector.injectpoint.MultiConstructorInjectPointFoundException;
 import org.kiwi.kjector.injectpoint.ParameterConstructorInjectPoint;
 
 import javax.inject.Inject;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class InjectPointFinder {
     public InjectPoint findInjectPoint(Class klass) {
         if (hasMultiInjectConstructor(klass)) {
-            throw new MultiInjectPointFoundException(klass);
+            throw new MultiConstructorInjectPointFoundException(klass);
         }
         if (hasDefaultConstructor(klass)) {
             return new DefaultConstructorInjectPoint(klass);
