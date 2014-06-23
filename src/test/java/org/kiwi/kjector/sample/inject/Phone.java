@@ -1,4 +1,4 @@
-package org.kiwi.kjector.sample;
+package org.kiwi.kjector.sample.inject;
 
 public class Phone {
     private final String brand;
