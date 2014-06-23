@@ -1,0 +1,13 @@
+apply plugin: "java"
+apply plugin: "idea"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "javax.inject:javax.inject:1"
+
+    testCompile "junit:junit:4.11"
+    testCompile "org.hamcrest:hamcrest-all:1.3"
+}
