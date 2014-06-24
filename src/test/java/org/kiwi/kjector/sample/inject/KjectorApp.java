@@ -2,7 +2,7 @@ package org.kiwi.kjector.sample.inject;
 
 import org.kiwi.kjector.container.Container;
 
-public class KjectorApplication {
+public class KjectorApp {
     public static void main(String[] args) {
         final Container container = Container.builder()
                 .register(Person.class)

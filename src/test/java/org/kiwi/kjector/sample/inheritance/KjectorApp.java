@@ -2,7 +2,7 @@ package org.kiwi.kjector.sample.inheritance;
 
 import org.kiwi.kjector.container.Container;
 
-public class Zone {
+public class KjectorApp {
     public static void main(String[] args) {
         final Container container = Container.builder()
                 .registerByName("name", "dog")
