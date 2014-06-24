@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kiwi.kjector.InjectPoint;
 import org.kiwi.kjector.InjectPointFinder;
+import org.kiwi.kjector.injectpoint.exception.InjectPointNotFoundException;
+import org.kiwi.kjector.injectpoint.exception.MultiConstructorInjectPointFoundException;
 import org.kiwi.kjector.injectpoint.sample.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;

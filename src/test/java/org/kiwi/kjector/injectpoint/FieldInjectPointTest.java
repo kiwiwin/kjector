@@ -2,7 +2,7 @@ package org.kiwi.kjector.injectpoint;
 
 import org.junit.Test;
 import org.kiwi.kjector.container.Container;
-import org.kiwi.kjector.container.NoSuitableNamedBeanRegisteredException;
+import org.kiwi.kjector.container.exception.NoSuitableNamedBeanRegisteredException;
 import org.kiwi.kjector.container.sample.FieldInjectSample;
 import org.kiwi.kjector.injectpoint.sample.Dog;
 import org.kiwi.kjector.injectpoint.sample.Duck;

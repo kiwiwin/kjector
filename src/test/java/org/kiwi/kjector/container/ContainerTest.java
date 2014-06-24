@@ -1,6 +1,8 @@
 package org.kiwi.kjector.container;
 
 import org.junit.Test;
+import org.kiwi.kjector.container.exception.NoSuitableBeanRegisteredException;
+import org.kiwi.kjector.container.exception.NoSuitableNamedBeanRegisteredException;
 import org.kiwi.kjector.container.sample.Car;
 import org.kiwi.kjector.container.sample.ParameterConstructorParameterSample;
 import org.kiwi.kjector.container.sample.ParameterConstructorSample;

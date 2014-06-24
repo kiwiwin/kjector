@@ -1,4 +1,4 @@
-package org.kiwi.kjector.injectpoint;
+package org.kiwi.kjector.injectpoint.exception;
 
 public class MultiConstructorInjectPointFoundException extends RuntimeException {
     private final Class klass;

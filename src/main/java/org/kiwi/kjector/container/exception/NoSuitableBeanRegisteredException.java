@@ -1,4 +1,4 @@
-package org.kiwi.kjector.container;
+package org.kiwi.kjector.container.exception;
 
 public class NoSuitableBeanRegisteredException extends RuntimeException {
     private final Class klass;

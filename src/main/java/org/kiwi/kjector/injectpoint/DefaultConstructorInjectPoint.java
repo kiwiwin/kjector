@@ -2,6 +2,7 @@ package org.kiwi.kjector.injectpoint;
 
 import org.kiwi.kjector.InjectPoint;
 import org.kiwi.kjector.container.Container;
+import org.kiwi.kjector.injectpoint.exception.ResolveObjectException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

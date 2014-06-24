@@ -1,6 +1,8 @@
 package org.kiwi.kjector.container;
 
 import org.kiwi.kjector.InjectPointFinder;
+import org.kiwi.kjector.container.exception.NoSuitableBeanRegisteredException;
+import org.kiwi.kjector.container.exception.NoSuitableNamedBeanRegisteredException;
 
 import javax.inject.Named;
 import java.lang.annotation.Annotation;
