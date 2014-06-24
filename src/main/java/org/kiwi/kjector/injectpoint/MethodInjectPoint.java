@@ -9,8 +9,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class MethodInjectPoint implements InjectPoint {
-    private final InjectPoint injectPoint;
-    private final List<Method> methods;
+    final InjectPoint injectPoint;
+    final List<Method> methods;
 
     public MethodInjectPoint(InjectPoint injectPoint, List<Method> methods) {
         this.injectPoint = injectPoint;

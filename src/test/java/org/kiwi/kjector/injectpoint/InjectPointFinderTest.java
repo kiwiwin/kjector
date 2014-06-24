@@ -9,6 +9,7 @@ import org.kiwi.kjector.injectpoint.exception.MultiConstructorInjectPointFoundEx
 import org.kiwi.kjector.injectpoint.sample.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
 public class InjectPointFinderTest {
@@ -56,5 +57,15 @@ public class InjectPointFinderTest {
         final InjectPoint injectPoint = injectPointFinder.findInjectPoint(MethodInjectAnnotationSample.class);
 
         assertThat(injectPoint, instanceOf(MethodInjectPoint.class));
+    }
+
+    @Test
+    public void should_inject_superclass_method_first() {
+        final MethodInjectPoint subclassMethodInjectPoint = (MethodInjectPoint) injectPointFinder.findInjectPoint(SubclassInjectee.class);
+        assertThat(subclassMethodInjectPoint.methods.size(), is(1));
+        assertThat(subclassMethodInjectPoint.methods.get(0).getName(), is("setSubclassField"));
+        final MethodInjectPoint superclassMethodInjectPoint = (MethodInjectPoint) subclassMethodInjectPoint.injectPoint;
+        assertThat(superclassMethodInjectPoint.methods.size(), is(1));
+        assertThat(superclassMethodInjectPoint.methods.get(0).getName(), is("setSuperclassField"));
     }
 }

@@ -17,9 +17,14 @@ import java.util.stream.Collectors;
 
 public class InjectPointFinder {
     public InjectPoint findInjectPoint(Class klass) {
-        return getMethodInjectPoint(klass,
-                getFieldInjectPoint(klass,
-                        getConstructorInjectPoint(klass)));
+        return getNonConstructorInjectPoint(klass, getConstructorInjectPoint(klass));
+    }
+
+    private InjectPoint getNonConstructorInjectPoint(Class klass, InjectPoint injectPoint) {
+        if (klass.getSuperclass() == Object.class) {
+            return getMethodInjectPoint(klass, getFieldInjectPoint(klass, injectPoint));
+        }
+        return getMethodInjectPoint(klass, getFieldInjectPoint(klass, getNonConstructorInjectPoint(klass.getSuperclass(), injectPoint)));
     }
 
     private InjectPoint getMethodInjectPoint(Class klass, InjectPoint injectPoint) {
