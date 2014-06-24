@@ -1,7 +1,6 @@
-package org.kiwi.kjector.injectpoint;
+package org.kiwi.kjector.injectpoint.exception;
 
 import org.junit.Test;
-import org.kiwi.kjector.injectpoint.exception.InjectPointNotFoundException;
 import org.kiwi.kjector.injectpoint.sample.Dummy;
 
 import static org.hamcrest.core.Is.is;
