@@ -6,6 +6,7 @@ import org.kiwi.kjector.container.exception.NoSuitableQualifierBeanRegisteredExc
 import org.kiwi.kjector.injectpoint.QualifierMeta;
 
 import javax.inject.Named;
+import javax.inject.Qualifier;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Executable;
 import java.util.*;
@@ -70,9 +71,9 @@ public class Container {
         List<Object> resolvedParameters = new ArrayList<>();
 
         for (int parameterIndex = 0; parameterIndex < parameterTypes.length; parameterIndex++) {
-            final String named = resolveNamedAnnotation(parameterAnnotations[parameterIndex]);
-            if (named != null && !named.isEmpty()) {
-                resolvedParameters.add(resolveByName(named));
+            final QualifierMeta qualifierMeta = resolveNamedAnnotation(parameterAnnotations[parameterIndex]);
+            if (qualifierMeta != null) {
+                resolvedParameters.add(resolveByQualifier(qualifierMeta));
             } else {
                 resolvedParameters.add(resolve(parameterTypes[parameterIndex]));
             }
@@ -80,12 +81,11 @@ public class Container {
         return resolvedParameters.toArray();
     }
 
-    private String resolveNamedAnnotation(Annotation[] annotations) {
-        final Named namedAnnotation = (Named) Arrays.asList(annotations).stream()
-                .filter(annotation -> annotation.annotationType() == Named.class)
+    private QualifierMeta resolveNamedAnnotation(Annotation[] annotations) {
+        return Arrays.asList(annotations).stream()
+                .filter(annotation -> annotation.annotationType().isAnnotationPresent(Qualifier.class))
+                .map(QualifierMeta::create)
                 .findFirst().orElseGet(() -> null);
-
-        return namedAnnotation == null ? null : namedAnnotation.value();
     }
 
     public Container registerByQualifier(QualifierMeta qualifierMeta, Object object) {
