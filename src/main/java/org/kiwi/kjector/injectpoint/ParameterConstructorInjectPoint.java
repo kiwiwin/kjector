@@ -20,8 +20,7 @@ public class ParameterConstructorInjectPoint implements InjectPoint {
         try {
             return parameterConstructor.newInstance(parameters);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
+            throw new ResolveObjectException();
         }
     }
 }

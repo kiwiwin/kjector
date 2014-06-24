@@ -18,8 +18,7 @@ public class DefaultConstructorInjectPoint implements InjectPoint {
         try {
             return defaultConstructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
+            throw new ResolveObjectException();
         }
     }
 }

@@ -29,8 +29,7 @@ public class FieldInjectPoint implements InjectPoint {
                 }
                 field.setAccessible(false);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                return null;
+                throw new ResolveObjectException();
             }
         }
         return resolvedObject;

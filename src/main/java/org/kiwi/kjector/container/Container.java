@@ -67,8 +67,9 @@ public class Container {
         List<Object> resolvedParameters = new ArrayList<>();
 
         for (int parameterIndex = 0; parameterIndex < parameterTypes.length; parameterIndex++) {
-            if (parameterAnnotations[parameterIndex].length > 0) {
-                resolvedParameters.add(resolveByName(resolveNamedAnnotation(parameterAnnotations[parameterIndex])));
+            final String named = resolveNamedAnnotation(parameterAnnotations[parameterIndex]);
+            if (named != null && !named.isEmpty()) {
+                resolvedParameters.add(resolveByName(named));
             } else {
                 resolvedParameters.add(resolve(parameterTypes[parameterIndex]));
             }

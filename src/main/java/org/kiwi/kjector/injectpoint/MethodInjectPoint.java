@@ -23,7 +23,7 @@ public class MethodInjectPoint implements InjectPoint {
             try {
                 method.invoke(resolvedObject, container.resolveExecutable(method));
             } catch (InvocationTargetException | IllegalAccessException e) {
-                e.printStackTrace();
+                throw new ResolveObjectException();
             }
         }
         return resolvedObject;
