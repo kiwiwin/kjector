@@ -3,6 +3,7 @@ package org.kiwi.kjector.container;
 import org.kiwi.kjector.InjectPointFinder;
 import org.kiwi.kjector.container.exception.NoSuitableBeanRegisteredException;
 import org.kiwi.kjector.container.exception.NoSuitableNamedBeanRegisteredException;
+import org.kiwi.kjector.injectpoint.QualifierMeta;
 
 import javax.inject.Named;
 import java.lang.annotation.Annotation;
@@ -13,7 +14,7 @@ public class Container {
     private final InjectPointFinder injectPointFinder;
     private final Set<Class> registeredClasses = new HashSet<>();
     private final Map<Class, Object> resolvedObjects = new HashMap<>();
-    private final Map<String, Object> namedObjects = new HashMap<>();
+    private final Map<QualifierMeta, Object> qualifierObjects = new HashMap<>();
 
     private Container(InjectPointFinder injectPointFinder) {
         this.injectPointFinder = injectPointFinder;
@@ -50,12 +51,12 @@ public class Container {
     }
 
     public Container registerByName(String objectName, Object object) {
-        namedObjects.put(objectName, object);
+        qualifierObjects.put(new QualifierMeta(Named.class).meta("value", objectName), object);
         return this;
     }
 
     public Object resolveByName(String objectName) {
-        final Object namedObject = namedObjects.get(objectName);
+        final Object namedObject = qualifierObjects.get(new QualifierMeta(Named.class).meta("value", objectName));
         if (namedObject == null) {
             throw new NoSuitableNamedBeanRegisteredException(objectName);
         }
