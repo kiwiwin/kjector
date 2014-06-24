@@ -4,6 +4,7 @@ import javax.inject.Qualifier;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,6 @@ public class QualifierMeta {
         final Class<? extends Annotation> annotationType = annotation.annotationType();
         final QualifierMeta qualifierMeta = new QualifierMeta(annotationType);
         if (annotationType.isAnnotationPresent(Qualifier.class)) {
-//            System.out.println(annotation.annotationType());
             for (Method method : annotationType.getDeclaredMethods()) {
                 try {
                     qualifierMeta.meta(method.getName(), method.invoke(annotation));
@@ -65,5 +65,12 @@ public class QualifierMeta {
         }
 
         return qualifierMeta;
+    }
+
+    public static QualifierMeta resolveQualifierMeta(Annotation[] annotations) {
+        return Arrays.asList(annotations).stream()
+                .filter(annotation -> annotation.annotationType().isAnnotationPresent(Qualifier.class))
+                .map(annotation -> QualifierMeta.create(annotation))
+                .findFirst().orElseGet(() -> null);
     }
 }
