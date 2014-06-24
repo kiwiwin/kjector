@@ -4,8 +4,9 @@ import org.kiwi.kjector.InjectPoint;
 import org.kiwi.kjector.container.Container;
 import org.kiwi.kjector.injectpoint.exception.ResolveObjectException;
 
-import javax.inject.Named;
+import javax.inject.Qualifier;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 
 public class FieldInjectPoint implements InjectPoint {
@@ -23,10 +24,11 @@ public class FieldInjectPoint implements InjectPoint {
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                if (!hasNamedQualifier(field)) {
+                final QualifierMeta qualifierMeta = getQualifier(field);
+                if (qualifierMeta == null) {
                     field.set(resolvedObject, container.resolve(field.getType()));
                 } else {
-                    field.set(resolvedObject, container.resolveByName(getQualifiedName(field)));
+                    field.set(resolvedObject, container.resolveByQualifier(qualifierMeta));
                 }
                 field.setAccessible(false);
             } catch (IllegalAccessException e) {
@@ -36,11 +38,11 @@ public class FieldInjectPoint implements InjectPoint {
         return resolvedObject;
     }
 
-    private String getQualifiedName(Field field) {
-        return field.getAnnotation(Named.class).value();
+    private QualifierMeta getQualifier(Field field) {
+        return Arrays.asList(field.getAnnotations()).stream()
+                .filter(annotation -> annotation.annotationType().isAnnotationPresent(Qualifier.class))
+                .map(annotation -> QualifierMeta.create(annotation))
+                .findFirst().orElseGet(() -> null);
     }
 
-    private boolean hasNamedQualifier(Field field) {
-        return field.getAnnotation(Named.class) != null;
-    }
 }

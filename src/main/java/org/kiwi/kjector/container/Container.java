@@ -2,7 +2,7 @@ package org.kiwi.kjector.container;
 
 import org.kiwi.kjector.InjectPointFinder;
 import org.kiwi.kjector.container.exception.NoSuitableBeanRegisteredException;
-import org.kiwi.kjector.container.exception.NoSuitableNamedBeanRegisteredException;
+import org.kiwi.kjector.container.exception.NoSuitableQualifierBeanRegisteredException;
 import org.kiwi.kjector.injectpoint.QualifierMeta;
 
 import javax.inject.Named;
@@ -58,7 +58,7 @@ public class Container {
     public Object resolveByName(String objectName) {
         final Object namedObject = qualifierObjects.get(new QualifierMeta(Named.class).meta("value", objectName));
         if (namedObject == null) {
-            throw new NoSuitableNamedBeanRegisteredException(objectName);
+            throw new NoSuitableQualifierBeanRegisteredException(objectName);
         }
         return namedObject;
     }
@@ -86,5 +86,18 @@ public class Container {
                 .findFirst().orElseGet(() -> null);
 
         return namedAnnotation == null ? null : namedAnnotation.value();
+    }
+
+    public Container registerByQualifier(QualifierMeta qualifierMeta, Object object) {
+        qualifierObjects.put(qualifierMeta, object);
+        return this;
+    }
+
+    public Object resolveByQualifier(QualifierMeta meta) {
+        final Object qualifierObject = qualifierObjects.get(meta);
+        if (qualifierObject == null) {
+            throw new NoSuitableQualifierBeanRegisteredException(meta.getClass().getName());
+        }
+        return qualifierObject;
     }
 }

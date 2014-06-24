@@ -2,7 +2,7 @@ package org.kiwi.kjector.injectpoint;
 
 import org.junit.Test;
 import org.kiwi.kjector.container.Container;
-import org.kiwi.kjector.container.exception.NoSuitableNamedBeanRegisteredException;
+import org.kiwi.kjector.container.exception.NoSuitableQualifierBeanRegisteredException;
 import org.kiwi.kjector.container.sample.FieldInjectSample;
 import org.kiwi.kjector.injectpoint.sample.Dog;
 import org.kiwi.kjector.injectpoint.sample.Duck;
@@ -40,7 +40,7 @@ public class FieldInjectPointTest {
         assertThat(farmer.getAnimal(), instanceOf(Duck.class));
     }
 
-    @Test(expected = NoSuitableNamedBeanRegisteredException.class)
+    @Test(expected = NoSuitableQualifierBeanRegisteredException.class)
     public void should_throw_exception_when_no_bean_provided_by_give_name() {
         final Container container = Container.builder()
                 .registerByName("dog", new Dog())
